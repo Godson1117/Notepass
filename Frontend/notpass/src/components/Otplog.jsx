@@ -1,30 +1,18 @@
 import React, { useState } from "react";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
   Button,
-  FormControl,
   Grid,
   IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
   TextField,
   Typography,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
-import { useFormik } from "formik";
-import * as Yup from 'yup';
+// import { useFormik } from "formik";
+// import * as Yup from 'yup';
 
-const Otp = () => {
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+const Otplog = () => {
 
   const formStyle = {
     "& .MuiOutlinedInput-root": {
@@ -54,27 +42,51 @@ const Otp = () => {
     width: "26ch",
   };
 
-  const initialValues = {
-    phone: '',
-    otp: ''
+  // const initialValues = {
+  //   phone: '',
+  //   otp: ''
+  // }
+
+  // const validationSchema = Yup.object().shape({
+  //   phone: Yup.string().length(10,'Invalid phone number').matches(/^[0-9]+$/,'Invalid phone number').required('Phone number required')
+  // })
+
+  // const formik = useFormik({
+  //   initialValues,
+  //   validationSchema,
+  //   onSubmit: values => console.log(values)
+  // })
+  let error
+  const [phone, setPhone] = useState('')
+  const [err, setErr] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const handleChange = (e) => {
+    setPhone(e.target.value)
   }
 
-  const validationSchema = Yup.object().shape({
-    phone: Yup.string().length(10,'Invalid phone number').matches(/^[0-9]+$/,'Invalid phone number').required('Phone number required'),
-    password: Yup.string().min(8, 'Minimum there must be 8 characters').max(16, 'Password length must be within 16').required('Password required')
-  })
+  const handleClick = () => {
+    if (phone.length !== 10) {
+      setErrorMessage('Invalid phone number')
+      setErr(true)
+    }
+    else {
+      setErrorMessage('')
+      setErr(false)
+    }
+    console.log(errorMessage)
+  }
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: values => console.log(values)
-  })
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+  }
 
 
   return (
     <Box
       sx={{
-        height: "31rem",
+        height: "25rem",
         width: "22rem",
         background: "rgba(38, 50, 56, 0.2)",
         backdropFilter: "blur(10px) saturate(120%)",
@@ -94,7 +106,7 @@ const Otp = () => {
         justifyContent="center"
         rowSpacing={1}
         component="form"
-        onSubmit={formik.handleSubmit}
+        onSubmit={handleSubmit}
       >
         <Grid item>
           <Typography
@@ -110,15 +122,39 @@ const Otp = () => {
             LOGIN
           </Typography>
         </Grid>
-      
+
         <Grid item>
           <TextField
             name="phone"
             label="Phone Number for OTP"
             variant="outlined"
             size="small"
+            value={phone}
+            onChange={handleChange}
+            error={err ? true : false}
+            helperText={errorMessage}
             sx={formStyle}
           />
+        </Grid>
+
+        <Grid item>
+          <Button
+            variant="contained"
+            size="large"
+            type="button"
+            onClick={handleClick}
+            sx={{
+              borderRadius: "8px",
+              "&:hover": {
+                background: "#009688",
+              },
+              m: 2,
+              width: "170px",
+              height: "40px",
+            }}
+          >
+            Generate OTP
+          </Button>
         </Grid>
 
         <Grid item>
@@ -154,4 +190,4 @@ const Otp = () => {
   );
 };
 
-export default Otp;
+export default Otplog;

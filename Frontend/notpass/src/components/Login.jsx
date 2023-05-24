@@ -182,7 +182,13 @@ const Login = () => {
 
         <Box component="p">OR</Box>
 
-        <Link to="/Otp">Login via OTP</Link>
+        <Box component={Link} sx={{
+          textDecoration: 'none',
+          color: 'primary.main',
+          '&:hover':{
+            color: 'success.light'
+          }
+        }} to="/otp">Login via OTP</Box>
 
         <Grid item>
           <Button
