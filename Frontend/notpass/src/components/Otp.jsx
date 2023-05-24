@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 
-const Login = () => {
+const Otp = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -55,12 +55,12 @@ const Login = () => {
   };
 
   const initialValues = {
-    email: '',
-    password: ''
+    phone: '',
+    otp: ''
   }
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid Email').required('Email required'),
+    phone: Yup.string().length(10,'Invalid phone number').matches(/^[0-9]+$/,'Invalid phone number').required('Phone number required'),
     password: Yup.string().min(8, 'Minimum there must be 8 characters').max(16, 'Password length must be within 16').required('Password required')
   })
 
@@ -110,79 +110,26 @@ const Login = () => {
             LOGIN
           </Typography>
         </Grid>
-
+      
         <Grid item>
           <TextField
-            name="email"
-            label="E-mail"
+            name="phone"
+            label="Phone Number for OTP"
             variant="outlined"
             size="small"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            error={formik.touched.email && formik.errors.email ? true : false}
-            helperText={formik.touched.email && formik.errors.email}
             sx={formStyle}
           />
         </Grid>
 
         <Grid item>
-          <FormControl variant="outlined" size="small" sx={formStyle}>
-            <InputLabel htmlFor="outlined-adornment-password">
-              Password
-            </InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                    color="primary"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              error={formik.touched.password && formik.errors.password ? true : false}
-            />
-          </FormControl>
-          <Typography variant="body2" sx={{
-            ml: 2,
-            mt: 1,
-            color: 'error.main',
-            fontSize: '12px'
-          }}>{formik.touched.password && formik.errors.password}
-          </Typography>
+          <TextField
+            name="phone"
+            label="OTP"
+            variant="outlined"
+            size="small"
+            sx={formStyle}
+          />
         </Grid>
-
-        <Grid container>
-          <Grid
-            item
-            component={Link}
-            sx={{
-              textDecoration: "none",
-              color: "primary.main",
-              ml: 8,
-              mt: 2,
-              "&:hover": {
-                color: "success.light",
-              },
-            }}
-          >
-            Forgot Password?
-          </Grid>
-        </Grid>
-
-        <Box component="p">OR</Box>
-
-        <Link to="/Otp">Login via OTP</Link>
 
         <Grid item>
           <Button
@@ -207,4 +154,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Otp;
