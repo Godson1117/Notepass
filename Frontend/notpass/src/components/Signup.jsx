@@ -21,11 +21,11 @@ import axios from 'axios';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const [isRegistered, setIsRegistered] = useState(false)
+  const [result, setResult] = useState({})
   const [visible, setVisible] = useState(false)
-  const [message, setMessage] = useState({})
+  const [loading, setLoading] = useState(false)
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -77,22 +77,19 @@ const Signup = () => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
+      setLoading(true)
       const user = await axios.post('http://localhost:8000/auth/signup', values)
-      if (user.data.success) {
-        setIsRegistered(true)
-        setVisible(true)
-      }
-      else {
-        setIsRegistered(false)
-        setVisible(true)
-      }
-      setMessage(user.data)
+      setResult(user.data)
+      setTimeout(() => {
+        setLoading(false)
+        setVisible(true)     
+      }, 3000);
+      setTimeout(() => {
+        setVisible(false)
+      }, 5000)
     }
   })
 
-  setTimeout(() => {
-    setVisible(false)
-  }, 5000);
 
 
   return (
@@ -100,7 +97,7 @@ const Signup = () => {
       <Box sx={{
         height: '10px'
       }}>
-        {visible && <Alert severity={isRegistered ? 'success' : 'error'}>{isRegistered ? `Success - ${message.result}` : `Error - ${message.result} `}</Alert>}
+        {visible && <Alert severity={result.success ? 'success' : 'error'}>{result.success ? `Success - ${result.message}` : `Error - ${result.message} `}</Alert>}
       </Box>
       <Box
         sx={{
@@ -238,7 +235,9 @@ const Signup = () => {
                 height: "40px",
               }}
             >
-              Join Now
+              Join Now <Box ml={1}>
+                {loading && <div className="spinner-border spinner-border-sm" role="status" />}
+              </Box>
             </Button>
           </Grid>
         </Grid>

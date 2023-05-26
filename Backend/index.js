@@ -7,8 +7,10 @@ const URI = "mongodb+srv://godson:stormbreaker1117@cluster0.g1fnrdy.mongodb.net/
 
 app.use(express.json())
 app.use(cors())
-mongoose.connect(URI).then( () => {
+mongoose.connect(URI).then(() => {
     console.log("Connected to database")
+}).catch(() => {
+    console.log("Couldn't connect to database...network error..")
 })
 
 

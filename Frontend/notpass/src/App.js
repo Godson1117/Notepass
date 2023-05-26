@@ -3,6 +3,7 @@ import Homepage from "./components/Homepage";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Otplog from "./components/Otplog";
+import Dashboard from "./components/Dashboard";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/otp" element={<Otplog />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );

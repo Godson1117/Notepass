@@ -16,15 +16,21 @@ import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
+import axios from "axios";
+import { Alert } from "@mui/material";
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
+  const [result, setResult] = useState({})
+  const [visible, setVisible] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
 
   const formStyle = {
     "& .MuiOutlinedInput-root": {
@@ -67,149 +73,173 @@ const Login = () => {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: values => console.log(values)
+    onSubmit: async (values) => {
+      setLoading(true)
+        const user = await axios.post('http://localhost:8000/auth/login', values)
+        setResult(user.data)
+        setTimeout(() => {
+          setLoading(false)
+          setVisible(true)          
+        }, 3000)
+        setTimeout(() => {
+          setVisible(false)
+        }, 5000)
+    }
   })
 
 
   return (
-    <Box
-      sx={{
-        height: "31rem",
-        width: "22rem",
-        background: "rgba(38, 50, 56, 0.2)",
-        backdropFilter: "blur(10px) saturate(120%)",
-        margin: "auto",
-        mt: "10rem",
-        borderRadius: "25px",
-      }}
-    >
-      <IconButton size="small" component={Link} to="/" disableRipple={true}>
-        <HomeIcon sx={{ mt: 2, ml: 2, color: "white" }}></HomeIcon>
-      </IconButton>
+    <>
+      <Box sx={{
+        height: '10px'
+      }}>
+        {visible && <Alert severity={result.success ? 'success' : 'error'}>{result.success ? `Success - ${result.message}` : `Error - ${result.message} `}</Alert>}
+      </Box>
 
-      <Grid
-        container
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        rowSpacing={1}
-        component="form"
-        onSubmit={formik.handleSubmit}
+      <Box
+        sx={{
+          height: "31rem",
+          width: "22rem",
+          background: "rgba(38, 50, 56, 0.2)",
+          backdropFilter: "blur(10px) saturate(120%)",
+          margin: "auto",
+          mt: "10rem",
+          borderRadius: "25px",
+        }}
       >
-        <Grid item>
-          <Typography
-            variant="h4"
-            sx={{
-              background:
-                "linear-gradient(39deg, rgba(255,0,0,1) 32%, rgba(0,255,236,1) 78%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              m: 2,
-            }}
-          >
-            LOGIN
-          </Typography>
-        </Grid>
+        <IconButton size="small" component={Link} to="/" disableRipple={true}>
+          <HomeIcon sx={{ mt: 2, ml: 2, color: "white" }}></HomeIcon>
+        </IconButton>
 
-        <Grid item>
-          <TextField
-            name="email"
-            label="E-mail"
-            variant="outlined"
-            size="small"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            error={formik.touched.email && formik.errors.email ? true : false}
-            helperText={formik.touched.email && formik.errors.email}
-            sx={formStyle}
-          />
-        </Grid>
+        <Grid
+          container
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          rowSpacing={1}
+          component="form"
+          onSubmit={formik.handleSubmit}
+        >
+          <Grid item>
+            <Typography
+              variant="h4"
+              sx={{
+                background:
+                  "linear-gradient(39deg, rgba(255,0,0,1) 32%, rgba(0,255,236,1) 78%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                m: 2,
+              }}
+            >
+              LOGIN
+            </Typography>
+          </Grid>
 
-        <Grid item>
-          <FormControl variant="outlined" size="small" sx={formStyle}>
-            <InputLabel htmlFor="outlined-adornment-password">
-              Password
-            </InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                    color="primary"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-              value={formik.values.password}
+          <Grid item>
+            <TextField
+              name="email"
+              label="E-mail"
+              variant="outlined"
+              size="small"
+              value={formik.values.email}
               onChange={formik.handleChange}
-              error={formik.touched.password && formik.errors.password ? true : false}
+              error={formik.touched.email && formik.errors.email ? true : false}
+              helperText={formik.touched.email && formik.errors.email}
+              sx={formStyle}
             />
-          </FormControl>
-          <Typography variant="body2" sx={{
-            ml: 2,
-            mt: 1,
-            color: 'error.main',
-            fontSize: '12px'
-          }}>{formik.touched.password && formik.errors.password}
-          </Typography>
-        </Grid>
+          </Grid>
 
-        <Grid container>
-          <Grid
-            item
-            component={Link}
-            sx={{
-              textDecoration: "none",
-              color: "primary.main",
-              ml: 8,
-              mt: 2,
-              "&:hover": {
-                color: "success.light",
-              },
-            }}
-          >
-            Forgot Password?
+          <Grid item>
+            <FormControl variant="outlined" size="small" sx={formStyle}>
+              <InputLabel htmlFor="outlined-adornment-password">
+                Password
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                      color="primary"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={formik.touched.password && formik.errors.password ? true : false}
+              />
+            </FormControl>
+            <Typography variant="body2" sx={{
+              ml: 2,
+              mt: 1,
+              color: 'error.main',
+              fontSize: '12px'
+            }}>{formik.touched.password && formik.errors.password}
+            </Typography>
+          </Grid>
+
+          <Grid container>
+            <Grid
+              item
+              component={Link}
+              sx={{
+                textDecoration: "none",
+                color: "primary.main",
+                ml: 8,
+                mt: 2,
+                "&:hover": {
+                  color: "success.light",
+                },
+              }}
+            >
+              Forgot Password?
+            </Grid>
+          </Grid>
+
+          <Box component="p">OR</Box>
+
+          <Box component={Link} sx={{
+            textDecoration: 'none',
+            color: 'primary.main',
+            '&:hover': {
+              color: 'success.light'
+            }
+          }} to="/otp">Login via OTP</Box>
+
+          <Grid item>
+            <Button
+              variant="contained"
+              size="large"
+              type="submit"
+              loading={true}
+              loadingIndicator="sui"
+              sx={{
+                borderRadius: "8px",
+                "&:hover": {
+                  background: "#009688",
+                },
+                m: 2,
+                width: "120px",
+                height: "40px",
+                color: 'white'
+              }}
+            >
+              Login <Box ml={1}>
+                {loading && <div className="spinner-border spinner-border-sm" role="status" />}
+              </Box>
+            </Button>
           </Grid>
         </Grid>
-
-        <Box component="p">OR</Box>
-
-        <Box component={Link} sx={{
-          textDecoration: 'none',
-          color: 'primary.main',
-          '&:hover':{
-            color: 'success.light'
-          }
-        }} to="/otp">Login via OTP</Box>
-
-        <Grid item>
-          <Button
-            variant="contained"
-            size="large"
-            type="submit"
-            sx={{
-              borderRadius: "8px",
-              "&:hover": {
-                background: "#009688",
-              },
-              m: 2,
-              width: "120px",
-              height: "40px",
-            }}
-          >
-            Login
-          </Button>
-        </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </>
   );
 };
 
