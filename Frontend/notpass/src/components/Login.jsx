@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import axios from "axios";
@@ -24,6 +24,7 @@ const Login = () => {
   const [result, setResult] = useState({})
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const handleClickShowPassword = () => setShowPassword((show) => !show)
 
@@ -74,16 +75,25 @@ const Login = () => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      setLoading(true)
+      try {
         const user = await axios.post('http://localhost:8000/auth/login', values)
+        setLoading(true)
         setResult(user.data)
         setTimeout(() => {
           setLoading(false)
-          setVisible(true)          
+          setVisible(true)
         }, 3000)
         setTimeout(() => {
           setVisible(false)
+          if (user.data.authtoken) {
+            localStorage.setItem('authtoken', user.data.authtoken)
+            navigate('/dashboard')
+          }
         }, 5000)
+      }
+      catch (e) {
+        setResult({ success: false, message: "Network connection Lost!" })
+      }
     }
   })
 

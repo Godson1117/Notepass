@@ -19,6 +19,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/auth', require('./routes/auth'))
+app.use('/passwords', require('./routes/psswd'))
 
 app.listen(port, () => {
     console.log(`Server started on port ${port}`)

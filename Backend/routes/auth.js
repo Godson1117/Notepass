@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const User = require("../models/user")
+const User = require("../models/User")
 
 router.post('/signup', async (req, res) => {
 
@@ -58,7 +58,7 @@ router.post('/login', async (req, res) => {
             id: user.id
           }
         }
-        authtoken = jwt.sign(data,JWT_KEY)
+        authtoken = jwt.sign(data, JWT_KEY)
       }
       else {
         success = false
