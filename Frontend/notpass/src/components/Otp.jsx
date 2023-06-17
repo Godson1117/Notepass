@@ -12,35 +12,37 @@ import { Link } from "react-router-dom";
 // import { useFormik } from "formik";
 // import * as Yup from 'yup';
 
+const formStyle = {
+  '& .MuiOutlinedInput-root': {
+    '& > fieldset': {
+      borderColor: '#757575',
+    },
+  },
+  '& .MuiOutlinedInput-root:hover': {
+    '& > fieldset': {
+      borderColor: 'success.light',
+    },
+  },
+  '& .MuiOutlinedInput-root.Mui-focused': {
+    '& > fieldset': {
+      borderColor: 'primary.main',
+    },
+  },
+  '& input': {
+    color: 'white',
+  },
+  '& .MuiFormLabel-root': {
+    color: 'primary.main',
+  },
+  '& .MuiFormLabel-root.Mui-focused': {
+    color: "white",
+  },
+  width: '26ch'
+}
+
+
 const Otplog = () => {
 
-  const formStyle = {
-    "& .MuiOutlinedInput-root": {
-      "& > fieldset": {
-        borderColor: "#757575",
-      },
-    },
-    "& .MuiOutlinedInput-root:hover": {
-      "& > fieldset": {
-        borderColor: "success.light",
-      },
-    },
-    "& .MuiOutlinedInput-root.Mui-focused": {
-      "& > fieldset": {
-        borderColor: "primary.main",
-      },
-    },
-    "& input": {
-      color: "white",
-    },
-    "& .MuiFormLabel-root": {
-      color: "primary.main",
-    },
-    "& .MuiFormLabel-root.Mui-focused": {
-      color: "white",
-    },
-    width: "26ch",
-  };
 
   // const initialValues = {
   //   phone: '',
@@ -56,32 +58,29 @@ const Otplog = () => {
   //   validationSchema,
   //   onSubmit: values => console.log(values)
   // })
-  let error
-  const [phone, setPhone] = useState('')
-  const [err, setErr] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
+  let error;
+  const [phone, setPhone] = useState("");
+  const [err, setErr] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
-    setPhone(e.target.value)
-  }
+    setPhone(e.target.value);
+  };
 
   const handleClick = () => {
     if (phone.length !== 10) {
-      setErrorMessage('Invalid phone number')
-      setErr(true)
+      setErrorMessage("Invalid phone number");
+      setErr(true);
+    } else {
+      setErrorMessage("");
+      setErr(false);
     }
-    else {
-      setErrorMessage('')
-      setErr(false)
-    }
-    console.log(errorMessage)
-  }
+    console.log(errorMessage);
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-
-  }
-
+    e.preventDefault();
+  };
 
   return (
     <Box

@@ -6,7 +6,7 @@ const router = express.Router()
 
 const Securitykey = "A5PFmByLaZH3JNzOMo2zrDNQtXjKhQz8"
 
-router.get('/getpasswords', loggeduser, async (req, res) => {
+router.get('/fetchpasswords', loggeduser, async (req, res) => {
 
    const decdata = []
    try {
@@ -57,13 +57,13 @@ router.put('/updatepassword/:id', loggeduser, async (req, res) => {
    }
 })
 
-router.delete('/deletepassword/:id', loggeduser, async(req,res)=>{
-   try{
+router.delete('/deletepassword/:id', loggeduser, async (req, res) => {
+   try {
       await Password.findByIdAndDelete(req.params.id)
-res.json({message:"Successfully deleted the password"})
+      res.json({ message: "Successfully deleted the password" })
    }
-   catch(e){
-      res.json({message:"Internalsrver error...can't delete the password"})
+   catch (e) {
+      res.json({ message: "Internal server error...can't delete the password" })
    }
 })
 

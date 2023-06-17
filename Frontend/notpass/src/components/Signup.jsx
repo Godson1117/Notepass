@@ -1,76 +1,66 @@
 import React, { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import {
-  Alert,
-  Box,
-  Button,
-  FormControl,
-  Grid,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Alert, Box, FormControl, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography, } from "@mui/material";
 import { Link } from "react-router-dom";
-import HomeIcon from '@mui/icons-material/Home';
+import HomeIcon from "@mui/icons-material/Home";
 import { useFormik } from "formik";
-import * as Yup from 'yup';
-import axios from 'axios';
+import * as Yup from "yup";
+import axios from "axios";
+import LoadingButton from '@mui/lab/LoadingButton';
+
+const formStyle = {
+  '& .MuiOutlinedInput-root': {
+    '& > fieldset': {
+      borderColor: '#757575',
+    },
+  },
+  '& .MuiOutlinedInput-root:hover': {
+    '& > fieldset': {
+      borderColor: 'success.light',
+    },
+  },
+  '& .MuiOutlinedInput-root.Mui-focused': {
+    '& > fieldset': {
+      borderColor: 'primary.main',
+    },
+  },
+  '& input': {
+    color: 'white',
+  },
+  '& .MuiFormLabel-root': {
+    color: 'primary.main',
+  },
+  '& .MuiFormLabel-root.Mui-focused': {
+    color: "white",
+  },
+  width: '26ch'
+}
+
 
 const Signup = () => {
-  const [showPassword, setShowPassword] = useState(false)
-  const [result, setResult] = useState({})
-  const [visible, setVisible] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+  const [result, setResult] = useState({});
+  const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show)
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
-  };
-
-  const formStyle = {
-    "& .MuiOutlinedInput-root": {
-      "& > fieldset": {
-        borderColor: "#757575",
-      },
-    },
-    "& .MuiOutlinedInput-root:hover": {
-      "& > fieldset": {
-        borderColor: "success.light",
-      },
-    },
-    "& .MuiOutlinedInput-root.Mui-focused": {
-      "& > fieldset": {
-        borderColor: "primary.main",
-      },
-    },
-    "& input": {
-      color: "white",
-    },
-    "& .MuiFormLabel-root": {
-      color: "primary.main",
-    },
-    "& .MuiFormLabel-root.Mui-focused": {
-      color: "white",
-    },
-    width: "26ch",
   };
 
   const initialValues = {
     username: '',
     email: '',
     phone: '',
-    password: ''
-  }
+    password: '',
+  };
 
   const validationSchema = Yup.object().shape({
-    username: Yup.string().min(5, 'Too short!').max(15, 'Too big!').required('Username required'),
-    email: Yup.string().email('Invalid Email').required('Email required'),
-    phone: Yup.string().length(10, 'Invalid phone number').matches(/^[0-9]+$/, 'Invalid phone number').required('Phone number required'),
-    password: Yup.string().min(8, 'Minimum there must be 8 characters').max(16, 'Password length must be within 16').required('Password required')
+    username: Yup.string().min(5, "Too short!").max(15, "Too big!").required("Username required"),
+    email: Yup.string().email("Invalid Email").required("Email required"),
+    phone: Yup.string().length(10, "Invalid phone number").matches(/^[0-9]+$/, "Invalid phone number").required("Phone number required"),
+    password: Yup.string().min(8, "Minimum there must be 8 characters").max(16, "Password length must be within 16").required("Password required")
   })
 
   const formik = useFormik({
@@ -82,37 +72,40 @@ const Signup = () => {
       setResult(user.data)
       setTimeout(() => {
         setLoading(false)
-        setVisible(true)     
-      }, 3000);
+        setVisible(true)
+      }, 3000)
       setTimeout(() => {
         setVisible(false)
       }, 5000)
     }
-  })
-
-
+  });
 
   return (
     <>
-      <Box sx={{
-        height: '10px'
-      }}>
-        {visible && <Alert severity={result.success ? 'success' : 'error'}>{result.success ? `Success - ${result.message}` : `Error - ${result.message} `}</Alert>}
+      <Box
+        sx={{
+          height: '10px',
+        }}
+      >
+        {visible && (
+          <Alert severity={result.success ? 'success' : 'error'}>
+            {result.success ? `Success - ${result.message}` : `Error - ${result.message} `}
+          </Alert>
+        )}
       </Box>
       <Box
         sx={{
-          height: "28rem",
-          width: "22rem",
-          background: "rgba(38, 50, 56, 0.2)",
-          backdropFilter: "blur(10px) saturate(120%)",
-          margin: "auto",
-          marginTop: "10rem",
-          borderRadius: "25px",
+          height: '32rem',
+          width: '22rem',
+          background: 'rgba(38, 50, 56, 0.2)',
+          backdropFilter: 'blur(10px) saturate(120%)',
+          margin: 'auto',
+          marginTop: '10rem',
+          borderRadius: '25px'
         }}
       >
-
         <IconButton size="small" component={Link} to="/" disableRipple={true}>
-          <HomeIcon sx={{ mt: 2, ml: 2, color: "white" }}></HomeIcon>
+          <HomeIcon sx={{ mt: 2, ml: 2, color: 'white' }}></HomeIcon>
         </IconButton>
 
         <Grid
@@ -124,15 +117,13 @@ const Signup = () => {
           component="form"
           onSubmit={formik.handleSubmit}
         >
-
           <Grid item>
             <Typography
               variant="h4"
               sx={{
-                background:
-                  "linear-gradient(210deg, rgba(255,0,0,1) 40%, rgba(0,255,223,1) 75%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                background: 'linear-gradient(210deg, rgba(255,0,0,1) 40%, rgba(0,255,223,1) 75%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
                 m: 2,
               }}
             >
@@ -205,40 +196,47 @@ const Signup = () => {
                   </InputAdornment>
                 }
                 label="Password"
-                value={formik.values.cpass}
+                value={formik.values.password}
                 onChange={formik.handleChange}
-                error={formik.touched.cpass && formik.errors.password ? true : false}
+                error={formik.touched.password && formik.errors.password ? true : false}
               />
             </FormControl>
-            <Typography variant="body2" sx={{
-              ml: 2,
-              mt: 1,
-              color: 'error.main',
-              fontSize: '12px'
-            }}>{formik.touched.password && formik.errors.password}
+            <Typography
+              variant="body2"
+              sx={{
+                ml: 2,
+                mt: 1,
+                color: 'error.main',
+                fontSize: '12px'
+              }}
+            >
+              {formik.touched.password && formik.errors.password}
             </Typography>
-
           </Grid>
 
           <Grid item>
-            <Button
+            <LoadingButton
               variant="contained"
               size="large"
               type="submit"
+              loading={loading}
+              loadingPosition="end"
               sx={{
-                borderRadius: "8px",
-                "&:hover": {
-                  background: "#009688",
+                borderRadius: '8px',
+                '&:hover': {
+                  background: '#009688',
                 },
-                m: 2,
-                width: "180px",
-                height: "40px",
+                '&:disabled': {
+                  color: '#616161'
+                },
+                mt: 2,
+                width: '120px',
+                height: '40px',
+                color: 'white',
               }}
             >
-              Join Now <Box ml={1}>
-                {loading && <div className="spinner-border spinner-border-sm" role="status" />}
-              </Box>
-            </Button>
+              LOGIN
+            </LoadingButton>
           </Grid>
         </Grid>
       </Box>
