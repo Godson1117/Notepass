@@ -7,6 +7,7 @@ const URI = "mongodb+srv://godson:stormbreaker1117@cluster0.g1fnrdy.mongodb.net/
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static('public'))
 mongoose.connect(URI).then(() => {
     console.log("Connected to database")
 }).catch(() => {
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 
 app.use('/auth', require('./routes/auth'))
 app.use('/passwords', require('./routes/psswd'))
+app.use('/notes', require('./routes/notes'))
 
 app.listen(port, () => {
     console.log(`Server started on port ${port}`)

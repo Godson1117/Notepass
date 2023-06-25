@@ -26,8 +26,8 @@ router.post('/storepassword', loggeduser, async (req, res) => {
 
    try {
       let encPass = crypto.AES.encrypt(req.body.password, Securitykey)
-      const data = await Password.create({
-         date: new Date().toDateString(),
+      await Password.create({
+         date: new Date(),
          userid: req.user.id,
          sitelink: req.body.sitelink,
          sitename: req.body.sitename,
@@ -46,7 +46,7 @@ router.put('/updatepassword/:id', loggeduser, async (req, res) => {
       let updatedData = {}
       updatedData.sitename = req.body.sitename
       updatedData.sitelink = req.body.sitelink
-      updatedData.date = new Date().toDateString()
+      updatedData.date = new Date()
       updatedData.password = newPass.toString()
       updatedData = await Password.findByIdAndUpdate(req.params.id, { $set: updatedData }, { new: true })
       res.json(updatedData)

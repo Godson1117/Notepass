@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, TextField } from '@mui/material';
+import { Grid, Input, TextField } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -33,18 +33,16 @@ const formStyle = {
     width: '26ch'
 }
 
-const Passform = ({ setPsswds, setSuccess, handleAddFormClose, setMessage, setLoading }) => {
+const Noteform = ({ setNotes, setSuccess, handleAddFormClose, setMessage, setLoading }) => {
 
     const initialValues = {
-        sitename: '',
-        sitelink: '',
-        password: ''
+        title: '',
+        description: ''
     }
 
     const validationSchema = Yup.object().shape({
-        sitename: Yup.string().required("Sitename required"),
-        sitelink: Yup.string().required("Sitelink required"),
-        password: Yup.string().required("Password required")
+        title: Yup.string().required("Title required"),
+        description: Yup.string().required("Description required")
     })
 
     const formik = useFormik({
@@ -52,14 +50,15 @@ const Passform = ({ setPsswds, setSuccess, handleAddFormClose, setMessage, setLo
         validationSchema,
         onSubmit: async (values) => {
             setProcessing(true)
-            await axios.post('http://localhost:8000/passwords/storepassword', values, {
+            await axios.post('http://localhost:8000/notes/storenote', { ...values, myfile: uploadFile }, {
                 headers: {
+                    'content-type': 'multipart/form-data',
                     'authtoken': sessionStorage.getItem('authtoken')
                 }
             })
-            setPsswds({ ...values, date: new Date() })
+            setNotes({ ...values, date: new Date().toDateString() })
             setProcessing(false)
-            setMessage('Password successfully added...')
+            setMessage('Note successfully added...')
             setSuccess(true)
             handleAddFormClose()
             setLoading(true)
@@ -68,6 +67,11 @@ const Passform = ({ setPsswds, setSuccess, handleAddFormClose, setMessage, setLo
     })
 
     const [processing, setProcessing] = useState(false)
+    const [uploadFile, setUploadFile] = useState('')
+
+    const handleUploadFile = (e) => {
+        setUploadFile(e.target.files[0])
+    }
 
     return (
         <Grid
@@ -77,50 +81,38 @@ const Passform = ({ setPsswds, setSuccess, handleAddFormClose, setMessage, setLo
             justifyContent="center"
             rowSpacing={1}
             component="form"
+            encType="multipart/form-data"
             onSubmit={formik.handleSubmit}
         >
 
             <Grid item>
                 <TextField
-                    name="sitename"
-                    label="Sitename"
-                    variant="outlined"
+                    name="title"
+                    label="Title"
                     size="small"
-                    value={formik.values.sitename}
+                    value={formik.values.title}
                     onChange={formik.handleChange}
-                    error={formik.touched.sitename && formik.errors.sitename ? true : false}
-                    helperText={formik.touched.sitename && formik.errors.sitename}
+                    error={formik.touched.title && formik.errors.title ? true : false}
+                    helperText={formik.touched.title && formik.errors.title}
                     sx={formStyle}
                 />
             </Grid>
 
             <Grid item>
                 <TextField
-                    name="sitelink"
-                    label="Sitelink"
-                    variant="outlined"
+                    name="description"
+                    label="Description"
                     size="small"
-                    value={formik.values.sitelink}
+                    value={formik.values.description}
                     onChange={formik.handleChange}
-                    error={formik.touched.sitelink && formik.errors.sitelink ? true : false}
-                    helperText={formik.touched.sitelink && formik.errors.sitelink}
+                    error={formik.touched.description && formik.errors.description ? true : false}
+                    helperText={formik.touched.description && formik.errors.description}
                     sx={formStyle}
                 />
             </Grid>
 
-            <Grid item>
-                <TextField
-                    name="password"
-                    label="Password"
-                    variant="outlined"
-                    type="password"
-                    size="small"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    error={formik.touched.password && formik.errors.password ? true : false}
-                    helperText={formik.touched.password && formik.errors.password}
-                    sx={formStyle}
-                />
+            <Grid item sx={{ ml: 1 }}>
+                <Input type="file" name="myfile" sx={formStyle} onChange={handleUploadFile} />
             </Grid>
 
             <Grid item>
@@ -152,4 +144,4 @@ const Passform = ({ setPsswds, setSuccess, handleAddFormClose, setMessage, setLo
     )
 }
 
-export default Passform
+export default Noteform

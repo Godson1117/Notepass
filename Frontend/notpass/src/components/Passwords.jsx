@@ -10,6 +10,7 @@ import axios from "axios";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import WarningTwoToneIcon from '@mui/icons-material/WarningTwoTone';
 import Passform from './Passform';
 import { useFormik } from 'formik';
 import * as Yup from "yup";
@@ -126,13 +127,7 @@ const Password = () => {
         'authtoken': sessionStorage.getItem('authtoken')
       }
     })
-    psswds.map((item) => {
-      if (item.id === id)
-        return values
-      else
-        return item
-    })
-    setPsswd({ ...values, date: new Date().toDateString() })
+    setPsswd({ ...values, date: new Date() })
     setProcessing(false)
     handleUpdateFormClose()
     handleClose()
@@ -161,6 +156,13 @@ const Password = () => {
 
   return (
     <>
+      {psswds.length === 0 && (
+        <>
+          <Alert severity="info">No Passwords are stored!</Alert>
+          <Alert severity="info" sx={{ mt: 1 }}>Add Passwords now and live your life</Alert>
+        </>
+      )}
+
       <Box sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -201,7 +203,10 @@ const Password = () => {
           <Fade in={open}>
             <Box sx={style}>
 
-              <Chip label={psswd.date} variant="outlined" size="small" sx={{ color: '#1de9b6', didsplay: 'block', ml: 30 }} />
+              {parseInt((new Date().getTime() - new Date(psswd.date).getTime()) / (1000 * 60 * 60 * 24)) >= 60 && <Tooltip title="Password is in use for more than 60 days...Change it">
+                <WarningTwoToneIcon color="warning" />
+              </Tooltip>}
+              <Chip label={new Date(psswd.date).toDateString()} variant="outlined" size="small" sx={{ color: '#1de9b6', didsplay: 'block', ml: 30 }} />
               <Typography component={Link} variant="body2" underline="none" href={psswd.sitelink} sx={{ display: 'block' }} >{psswd.sitename}</Typography>
               <Typography align="left" variant="body2" mt={2}>{psswd.password}</Typography>
 

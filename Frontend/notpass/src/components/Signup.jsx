@@ -230,12 +230,12 @@ const Signup = () => {
                   color: '#616161'
                 },
                 mt: 2,
-                width: '120px',
-                height: '40px',
+                width: '150px',
+                height: '50px',
                 color: 'white',
               }}
             >
-              LOGIN
+              JOIN NOW
             </LoadingButton>
           </Grid>
         </Grid>

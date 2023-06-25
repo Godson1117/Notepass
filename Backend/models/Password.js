@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const passwordSchema = new mongoose.Schema({
-    date: String,
+    date: Date,
     userid: String,
     sitename: String,
     sitelink: String,
