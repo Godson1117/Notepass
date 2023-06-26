@@ -4,6 +4,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Otp from "./components/Otp";
 import Dashboard from "./components/Dashboard";
+import PassResetForm from "./components/PassResetForm";
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/otp" element={<Otp />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/passreset" element={<PassResetForm />} />
       </Routes>
     </BrowserRouter>
   );

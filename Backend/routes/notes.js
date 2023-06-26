@@ -1,7 +1,7 @@
 const express = require('express')
 const multer = require('multer')
 const Note = require('../models/Note')
-const loggeduser = require('../midlewares/loggeduser')
+const verifyUser = require('../midlewares/verifyUser')
 const router = express.Router()
 
 const multerStorage = multer.diskStorage({
@@ -28,7 +28,7 @@ const upload = multer({
     fileFilter: multerFilter,
 })
 
-router.get('/fetchnotes', loggeduser, async (req, res) => {
+router.get('/fetchnotes', verifyUser, async (req, res) => {
 
     try {
         const data = await Note.find({ userid: req.user.id }).select({ userid: 0 })
@@ -39,14 +39,14 @@ router.get('/fetchnotes', loggeduser, async (req, res) => {
     }
 })
 
-router.post('/storenote', loggeduser, upload.single('myfile'), async (req, res) => {
+router.post('/storenote', verifyUser, upload.single('myfile'), async (req, res) => {
     try {
         await Note.create({
             date: new Date().toDateString(),
             userid: req.user.id,
             title: req.body.title,
             description: req.body.description,
-            attachement: req.filename == undefined ? '' : req.file.filename
+            attachement: req.file == undefined ? '' : req.file.filename
         })
         res.json({ success: true, message: "Note succesfully stored" })
     }
@@ -56,12 +56,12 @@ router.post('/storenote', loggeduser, upload.single('myfile'), async (req, res) 
     }
 })
 
-router.put('/updatenote/:id', loggeduser, upload.single('myfile'), async (req, res) => {
+router.put('/updatenote/:id', verifyUser, upload.single('myfile'), async (req, res) => {
     try {
         let updatedData = {}
         updatedData.title = req.body.title
         updatedData.description = req.body.description
-        if(req.file != undefined)
+        if (req.file != undefined)
             updatedData.attachement = req.file.filename
         updatedData.date = new Date().toDateString()
         await Note.findByIdAndUpdate(req.params.id, { $set: updatedData }, { new: true })
@@ -73,7 +73,7 @@ router.put('/updatenote/:id', loggeduser, upload.single('myfile'), async (req, r
     }
 })
 
-router.delete('/deletenote/:id', loggeduser, async (req, res) => {
+router.delete('/deletenote/:id', verifyUser, async (req, res) => {
     try {
         await Note.findByIdAndDelete(req.params.id)
         res.json({ message: "Successfully deleted the note" })

@@ -1,12 +1,12 @@
 const express = require('express')
 const crypto = require('crypto-js')
 const Password = require('../models/Password')
-const loggeduser = require('../midlewares/loggeduser')
+const verifyUser = require('../midlewares/verifyUser')
 const router = express.Router()
 
 const Securitykey = "A5PFmByLaZH3JNzOMo2zrDNQtXjKhQz8"
 
-router.get('/fetchpasswords', loggeduser, async (req, res) => {
+router.get('/fetchpasswords', verifyUser, async (req, res) => {
 
    const decdata = []
    try {
@@ -22,7 +22,7 @@ router.get('/fetchpasswords', loggeduser, async (req, res) => {
    }
 })
 
-router.post('/storepassword', loggeduser, async (req, res) => {
+router.post('/storepassword', verifyUser, async (req, res) => {
 
    try {
       let encPass = crypto.AES.encrypt(req.body.password, Securitykey)
@@ -40,7 +40,7 @@ router.post('/storepassword', loggeduser, async (req, res) => {
    }
 })
 
-router.put('/updatepassword/:id', loggeduser, async (req, res) => {
+router.put('/updatepassword/:id', verifyUser, async (req, res) => {
    try {
       const newPass = crypto.AES.encrypt(req.body.password, Securitykey)
       let updatedData = {}
@@ -57,7 +57,7 @@ router.put('/updatepassword/:id', loggeduser, async (req, res) => {
    }
 })
 
-router.delete('/deletepassword/:id', loggeduser, async (req, res) => {
+router.delete('/deletepassword/:id', verifyUser, async (req, res) => {
    try {
       await Password.findByIdAndDelete(req.params.id)
       res.json({ message: "Successfully deleted the password" })

@@ -38,9 +38,10 @@ const formStyle = {
 }
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false)
   const [result, setResult] = useState({})
-  const [visible, setVisible] = useState(false)
+  const [show, setShow] = useState(false)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
@@ -48,7 +49,7 @@ const Login = () => {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault()
-  };
+  }
 
 
   const initialValues = {
@@ -59,7 +60,7 @@ const Login = () => {
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid Email").required("Email required"),
     password: Yup.string().min(8, "Minimum there must be 8 characters").max(16, "Password length must be within 16").required("Password required"),
-  });
+  })
 
   const formik = useFormik({
     initialValues,
@@ -71,10 +72,10 @@ const Login = () => {
         setResult(user.data)
         setTimeout(() => {
           setLoading(false)
-          setVisible(true)
+          setShow(true)
         }, 3000);
         setTimeout(() => {
-          setVisible(false)
+          setShow(false)
           if (user.data.authtoken) {
             sessionStorage.setItem('authtoken', user.data.authtoken)
             navigate('/dashboard')
@@ -93,7 +94,7 @@ const Login = () => {
           height: '10px',
         }}
       >
-        {visible && (
+        {show && (
           <Alert severity={result.success ? 'success' : 'error'}>
             {result.success ? `Success - ${result.message}` : `Error - ${result.message} `}
           </Alert>
@@ -102,7 +103,7 @@ const Login = () => {
 
       <Box
         sx={{
-          height: '31rem',
+          height: '25rem',
           width: '22rem',
           background: 'rgba(38, 50, 56, 0.2)',
           backdropFilter: 'blur(10px) saturate(120%)',
@@ -197,6 +198,7 @@ const Login = () => {
             <Grid
               item
               component={Link}
+              to="/otp"
               sx={{
                 textDecoration: "none",
                 color: "primary.main",
@@ -210,22 +212,6 @@ const Login = () => {
               Forgot Password?
             </Grid>
           </Grid>
-
-          <Box component="p">OR</Box>
-
-          <Box
-            component={Link}
-            sx={{
-              textDecoration: 'none',
-              color: 'primary.main',
-              '&:hover': {
-                color: 'success.light',
-              },
-            }}
-            to="/otp"
-          >
-            Login via OTP
-          </Box>
 
           <Grid item>
             <LoadingButton

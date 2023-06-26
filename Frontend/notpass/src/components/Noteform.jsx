@@ -33,7 +33,7 @@ const formStyle = {
     width: '26ch'
 }
 
-const Noteform = ({ setNotes, setSuccess, handleAddFormClose, setMessage, setLoading }) => {
+const Noteform = ({ setNotes, getnotes, setSuccess, handleAddFormClose, setMessage, setLoading }) => {
 
     const initialValues = {
         title: '',
@@ -62,7 +62,10 @@ const Noteform = ({ setNotes, setSuccess, handleAddFormClose, setMessage, setLoa
             setSuccess(true)
             handleAddFormClose()
             setLoading(true)
-            setTimeout(() => setLoading(false), 2000)
+            setTimeout(() => {
+                setLoading(false)
+                getnotes()
+            }, 2000)
         }
     })
 

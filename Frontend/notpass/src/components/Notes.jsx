@@ -270,7 +270,7 @@ const Notes = () => {
                             backdropFilter: 'blur(25px) saturate(200%)',
                             borderRadius: '25px'
                         }}>
-                            <Noteform setNotes={(value) => setNotes([...notes, value])} setSuccess={(value) => setSuccess(value)} handleAddFormClose={handleAddFormClose} setMessage={(mssg) => setMessage(mssg)} setLoading={(value) => setLoading(value)} />
+                            <Noteform setNotes={(value) => setNotes([...notes, value])} setSuccess={(value) => setSuccess(value)} handleAddFormClose={handleAddFormClose} setMessage={(mssg) => setMessage(mssg)} setLoading={(value) => setLoading(value)} getnotes={getnotes} />
                         </Box>
                     </Fade>
                 </Modal>
@@ -341,7 +341,7 @@ const Notes = () => {
                                 </Grid>
 
                                 <Grid item>
-                                    <Input type="file" name="myfile" onChange={handleUploadFile} />
+                                    <Input type="file" name="myfile" sx={formStyle} onChange={handleUploadFile} />
                                 </Grid>
 
                                 <Grid item>
