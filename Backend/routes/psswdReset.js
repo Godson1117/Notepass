@@ -5,8 +5,8 @@ const User = require("../models/User")
 const verifyUser = require('../midlewares/verifyUser')
 
 const accountSid = "AC36bda1a3f5bdaffb58f0642acf6acf14"
-const authToken = "2e81e821646c500f08e50da5ac341ed1"
-const verifySid = "VAf257e4210f8c728535f23a7f3c5a2b90"
+const authToken = "8b02892957b9d1f580c811adf1098d36"
+const verifySid = "VA0d9380e10fe05e12ebc26a8397084a9c"
 const client = require("twilio")(accountSid, authToken)
 
 const country = '+91'
@@ -16,7 +16,7 @@ router.post('/otpverify', async (req, res) => {
     try {
         const user = await User.findOne({ phone: req.body.phone })
         if (!user)
-            res.json({ success: false, messsage: "No user Exists with this phone number" })
+            res.json({ success: false, message: "No user Exists with this phone number" })
         else if (user && req.body.otp == '') {
             await client.verify.v2
                 .services(verifySid)

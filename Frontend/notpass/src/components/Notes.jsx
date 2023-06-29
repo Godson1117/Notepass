@@ -112,6 +112,8 @@ const Notes = () => {
         }).then(res => {
             setNotes(res.data)
             setLoading(false)
+        }).catch(()=>{
+            alert('No internet')
         })
     }
 

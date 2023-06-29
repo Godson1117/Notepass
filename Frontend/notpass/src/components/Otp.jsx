@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Box, Button, Grid, IconButton, TextField, Typography } from "@mui/material";
+import { Alert, Box, Grid, IconButton, TextField, Typography } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Link, useNavigate } from "react-router-dom";
@@ -52,9 +52,9 @@ const Otplog = () => {
     initialValues,
     validationSchema,
     onSubmit: async () => {
-      setLoading(true)
+      setLoading({ btn: 'sub' })
       result = await axios.post('http://localhost:8000/passwordreset/otpverify', { phone, otp: formik.values.otp })
-      setLoading(false)
+      setLoading({ btn: '' })
       setResponse(result.data)
       setTimeout(() => {
         setShow(true)
@@ -74,7 +74,7 @@ const Otplog = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const [show, setShow] = useState(false)
   const [response, setResponse] = useState({})
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState({ btn: '' })
 
   const navigate = useNavigate()
 
@@ -88,12 +88,12 @@ const Otplog = () => {
       setErr(true)
     }
     else {
-      setLoading(true)
+      setLoading({ btn: 'gen' })
       setErrorMessage('')
       setErr(false)
 
       result = await axios.post('http://localhost:8000/passwordreset/otpverify', { phone, otp: formik.values.otp })
-      setLoading(false)
+      setLoading({ btn: '' })
       setResponse(result.data)
       setShow(true)
       setTimeout(() => {
@@ -170,7 +170,7 @@ const Otplog = () => {
               variant="contained"
               size="large"
               type="button"
-              loading={loading}
+              loading={loading.btn === 'gen' ? true : false}
               loadingPosition="end"
               onClick={genOtp}
               sx={{
@@ -206,22 +206,27 @@ const Otplog = () => {
           </Grid>
 
           <Grid item>
-            <Button
+            <LoadingButton
               variant="contained"
               size="large"
               type="submit"
+              loadingPosition="end"
+              loading={loading.btn === 'sub' ? true : false}
               sx={{
                 borderRadius: "8px",
                 "&:hover": {
                   background: "#009688",
                 },
+                '&:disabled': {
+                  color: '#616161'
+                },
                 m: 2,
-                width: "120px",
+                width: "130px",
                 height: "40px",
               }}
             >
               Submit
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </Box>
